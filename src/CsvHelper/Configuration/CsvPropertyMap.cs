@@ -144,6 +144,18 @@ namespace CsvHelper.Configuration
 			return this;
 		}
 
+	    /// <summary>
+	    /// Creates a custom converter using the specified expressions.
+	    /// </summary>
+	    /// <param name="convertToStringExpression">The convert to string expression</param>
+	    /// <param name="convertFromStringExpression">The convert from string expression</param>
+	    public virtual CsvPropertyMap TypeConverter( Func<object, string> convertToStringExpression,
+            Func<string, object> convertFromStringExpression = null)
+	    {
+	        data.TypeConverter = new CustomTypeConverter( convertToStringExpression, convertFromStringExpression );
+            return this;
+	    }
+
 		/// <summary>
 		/// Specifies an expression to be used to convert data in the
 		/// row to the property.
