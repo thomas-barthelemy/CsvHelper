@@ -3,6 +3,7 @@
 // See LICENSE.txt for details or visit http://www.opensource.org/licenses/ms-pl.html
 // http://csvhelper.com
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace CsvHelper.Configuration
@@ -52,5 +53,30 @@ namespace CsvHelper.Configuration
 		{
 			return Mapping.GetMaxIndex();
 		}
+
+	    /// <summary>
+	    /// Sets a name in the referenced map for a specified property.
+	    /// </summary>
+	    /// <param name="propertyName">
+	    /// The name of a property in the referenced <see cref="CsvClassMap"/>.
+	    /// </param>
+        /// <param name="names">The possible names of the CSV field.</param>
+	    public CsvPropertyReferenceMap PropertyName( string propertyName, params string[] names )
+	    {
+            if ( names == null || names.Length == 0 )
+            {
+                throw new ArgumentNullException( "names" );
+            }
+
+	        var propertyMap = Mapping.PropertyMaps.FirstOrDefault( p => Equals( p.Data.Property.Name ) );
+
+            if (propertyMap == null) return this;
+
+            propertyMap.Data.Names.Clear();
+            propertyMap.Data.Names.AddRange( names );
+            propertyMap.Data.IsNameSet = true;
+	        
+            return this;
+	    }
 	}
 }
